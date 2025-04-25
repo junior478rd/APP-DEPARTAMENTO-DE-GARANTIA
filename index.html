@@ -41,10 +41,15 @@
       width: 100%;
       max-width: 300px;
     }
-    .exportar, .eliminar, .formulario button {
+    .exportar, .eliminar, .formulario button, .logout {
       padding: 6px 12px;
       margin: 8px 0;
       cursor: pointer;
+    }
+    .logout {
+      background: #e74c3c;
+      color: white;
+      border: none;
     }
   </style>
 </head>
@@ -64,6 +69,10 @@
   </div>
 
   <div id="contenido">
+    <div style="text-align: right;">
+      <button onclick="cerrarSesion()" class="logout">🔒 Cerrar sesión</button>
+    </div>
+
     <h1>Garantía 1.1 - Yo Smart</h1>
 
     <button class="exportar" onclick="exportTableToExcel('inventario', 'inventario_excel')">📅 Exportar a Excel</button>
@@ -125,6 +134,19 @@
       } else {
         document.getElementById("mensaje").textContent = "Usuario o contraseña incorrecta";
       }
+    }
+
+    function cerrarSesion() {
+      document.getElementById("usuario").value = "";
+      document.getElementById("contrasena").value = "";
+      document.getElementById("mensaje").textContent = "";
+
+      const tbody = document.querySelector("#inventario tbody");
+      tbody.innerHTML = "";
+
+      document.getElementById("contenido").style.display = "none";
+      document.getElementById("cargando").style.display = "none";
+      document.getElementById("login").style.display = "block";
     }
 
     function agregarRegistro() {
@@ -198,4 +220,5 @@
 
 </body>
 </html>
+
 
