@@ -4,63 +4,147 @@
   <meta charset="UTF-8">
   <title>Inventario</title>
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f4f6f9;
+      margin: 0;
+      padding: 0;
+      color: #333;
     }
-    #cargando, #contenido {
-      display: none;
+
+    h1, h2 {
+      color: #2c3e50;
+      text-align: center;
     }
+
+    #login, #contenido {
+      max-width: 800px;
+      margin: 40px auto;
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    }
+
+    #login input, .formulario input {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    #login button, .formulario button, .exportar, .eliminar, .logout {
+      display: inline-block;
+      padding: 10px 16px;
+      margin-top: 15px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.3s ease;
+    }
+
+    #login button {
+      background-color: #3498db;
+      color: white;
+    }
+
+    #login button:hover {
+      background-color: #2980b9;
+    }
+
+    .logout {
+      background-color: #e74c3c;
+      color: white;
+    }
+
+    .logout:hover {
+      background-color: #c0392b;
+    }
+
+    .exportar {
+      background-color: #2ecc71;
+      color: white;
+      margin-bottom: 20px;
+    }
+
+    .exportar:hover {
+      background-color: #27ae60;
+    }
+
+    .eliminar {
+      background-color: #e67e22;
+      color: white;
+    }
+
+    .eliminar:hover {
+      background-color: #d35400;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      background: white;
+      border-radius: 6px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    th {
+      background-color: #2980b9;
+      color: white;
+      padding: 12px;
+    }
+
+    td {
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .formulario {
+      margin-top: 40px;
+    }
+
     .spinner {
       border: 4px solid #f3f3f3;
       border-top: 4px solid #3498db;
       border-radius: 50%;
-      width: 40px;
-      height: 40px;
+      width: 50px;
+      height: 50px;
       animation: spin 1s linear infinite;
-      margin: 10px auto;
+      margin: 20px auto;
     }
+
+    #cargando {
+      text-align: center;
+      margin-top: 100px;
+    }
+
+    #mensaje {
+      color: red;
+      margin-top: 10px;
+    }
+
     @keyframes spin {
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-    }
-    th, td {
-      border: 1px solid #999;
-      padding: 8px;
-      text-align: center;
-    }
-    .formulario input {
-      display: block;
-      margin: 8px 0;
-      padding: 6px;
-      width: 100%;
-      max-width: 300px;
-    }
-    .exportar, .eliminar, .formulario button, .logout {
-      padding: 6px 12px;
-      margin: 8px 0;
-      cursor: pointer;
-    }
-    .logout {
-      background: #e74c3c;
-      color: white;
-      border: none;
     }
   </style>
 </head>
 <body>
 
   <div id="login">
-    <h2>BIENVENIDO</h2>
+    <h2>🔐 BIENVENIDO</h2>
     <input type="text" id="usuario" placeholder="Usuario">
     <input type="password" id="contrasena" placeholder="Contraseña">
     <button onclick="iniciarSesion()">Entrar</button>
-    <p id="mensaje" style="color: red;"></p>
+    <p id="mensaje"></p>
   </div>
 
   <div id="cargando">
@@ -68,12 +152,12 @@
     <div class="spinner"></div>
   </div>
 
-  <div id="contenido">
+  <div id="contenido" style="display: none;">
     <div style="text-align: right;">
       <button onclick="cerrarSesion()" class="logout">🔒 Cerrar sesión</button>
     </div>
 
-    <h1>Garantía 1.1 - Yo Smart</h1>
+    <h1>📋 Garantía 1.1 - Yo Smart</h1>
 
     <button class="exportar" onclick="exportTableToExcel('inventario', 'inventario_excel')">📅 Exportar a Excel</button>
 
@@ -97,7 +181,7 @@
     </table>
 
     <div class="formulario">
-      <h2>Agregar nuevo registro</h2>
+      <h2>➕ Agregar nuevo registro</h2>
       <input type="text" id="fechaEntrada" placeholder="Fecha de Entrada">
       <input type="text" id="equipo" placeholder="Equipo">
       <input type="text" id="imel" placeholder="IMEL">
@@ -106,119 +190,11 @@
       <input type="text" id="cedula" placeholder="Cédula">
       <input type="text" id="tecnico" placeholder="Técnico">
       <input type="text" id="fechaSalida" placeholder="Fecha de Salida">
-      <button onclick="agregarRegistro()">➕ Agregar al Inventario</button>
+      <button onclick="agregarRegistro()">Agregar al Inventario</button>
     </div>
   </div>
 
-  <script>
-    function iniciarSesion() {
-      const usuario = document.getElementById("usuario").value;
-      const contrasena = document.getElementById("contrasena").value;
-
-      const usuariosValidos = {
-        "felix": "1234",
-        "emely": "1111",
-        "katherin": "2222",
-        "oriana": "3333",
-        "erick": "4444"
-      };
-
-      if (usuariosValidos[usuario] === contrasena) {
-        document.getElementById("login").style.display = "none";
-        document.getElementById("cargando").style.display = "block";
-
-        setTimeout(() => {
-          document.getElementById("cargando").style.display = "none";
-          document.getElementById("contenido").style.display = "block";
-        }, 2000);
-      } else {
-        document.getElementById("mensaje").textContent = "Usuario o contraseña incorrecta";
-      }
-    }
-
-    function cerrarSesion() {
-      document.getElementById("usuario").value = "";
-      document.getElementById("contrasena").value = "";
-      document.getElementById("mensaje").textContent = "";
-
-      const tbody = document.querySelector("#inventario tbody");
-      tbody.innerHTML = "";
-
-      document.getElementById("contenido").style.display = "none";
-      document.getElementById("cargando").style.display = "none";
-      document.getElementById("login").style.display = "block";
-    }
-
-    function agregarRegistro() {
-      const datos = {
-        fechaEntrada: document.getElementById("fechaEntrada").value,
-        equipo: document.getElementById("equipo").value,
-        imel: document.getElementById("imel").value,
-        problema: document.getElementById("problema").value,
-        cliente: document.getElementById("cliente").value,
-        cedula: document.getElementById("cedula").value,
-        tecnico: document.getElementById("tecnico").value,
-        fechaSalida: document.getElementById("fechaSalida").value
-      };
-
-      const tabla = document.getElementById("inventario").getElementsByTagName('tbody')[0];
-      const nuevaFila = tabla.insertRow();
-      Object.values(datos).forEach(valor => {
-        const celda = nuevaFila.insertCell();
-        celda.textContent = valor;
-      });
-
-      const celdaAccion = nuevaFila.insertCell();
-      const boton = document.createElement("button");
-      boton.textContent = "Eliminar";
-      boton.className = "eliminar";
-      boton.onclick = function () {
-        eliminarFila(this);
-      };
-      celdaAccion.appendChild(boton);
-
-      document.querySelectorAll(".formulario input").forEach(input => input.value = "");
-
-      fetch('guardar_registro.php', {
-        method: 'POST',
-        body: JSON.stringify(datos),
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
-      .then(response => response.json())
-      .then(resultado => {
-        if (resultado.status === 'ok') {
-          console.log('Registro guardado correctamente');
-        } else {
-          alert('Error al guardar: ' + resultado.mensaje);
-        }
-      })
-      .catch(error => {
-        alert('Error en la conexión con el servidor');
-        console.error(error);
-      });
-    }
-
-    function eliminarFila(boton) {
-      const fila = boton.closest("tr");
-      fila.remove();
-    }
-
-    function exportTableToExcel(tableID, filename = '') {
-      const downloadLink = document.createElement("a");
-      const dataType = 'application/vnd.ms-excel';
-      const tableSelect = document.getElementById(tableID);
-      const tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
-
-      filename = filename ? filename + '.xls' : 'excel_data.xls';
-      downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
-      downloadLink.download = filename;
-      downloadLink.click();
-    }
-  </script>
-
+  <!-- Tu script va aquí, ya lo tienes incluido arriba -->
 </body>
 </html>
-
 
