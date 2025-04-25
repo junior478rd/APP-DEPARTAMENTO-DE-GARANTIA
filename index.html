@@ -106,7 +106,15 @@
       const usuario = document.getElementById("usuario").value;
       const contrasena = document.getElementById("contrasena").value;
 
-      if (usuario === "felix" && contrasena === "1234") {
+      const usuariosValidos = {
+        "felix": "1234",
+        "ana": "1111",
+        "carlos": "2222",
+        "laura": "3333",
+        "pedro": "4444"
+      };
+
+      if (usuariosValidos[usuario] === contrasena) {
         document.getElementById("login").style.display = "none";
         document.getElementById("cargando").style.display = "block";
 
@@ -190,3 +198,4 @@
 
 </body>
 </html>
+
